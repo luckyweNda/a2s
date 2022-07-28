@@ -35,6 +35,8 @@ public:
 
 private:
     a2s_info process_info(std::unique_ptr<unsigned char[]>& p);
+    void check_for_timeout();
+    int16_t bytes_to_int16(unsigned char*);
 };
 
 

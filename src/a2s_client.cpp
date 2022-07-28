@@ -30,6 +30,13 @@ std::shared_ptr<a2s_info> client::get_info()
         else 
             info_p = std::make_shared<a2s_info>(process_info(info_byte));
     });
+    check_for_timeout();
+
+    return info_p;
+}
+
+void client::check_for_timeout()
+{
     io_.restart();
     io_.run_for(std::chrono::milliseconds(timeout_));
     if(!io_.stopped())
@@ -37,17 +44,59 @@ std::shared_ptr<a2s_info> client::get_info()
         socket_.cancel();
         io_.stop();
     }
-
-    return info_p;
 }
 
 a2s_info client::process_info(std::unique_ptr<unsigned char[]>& ptr)
 {
-    //a2s_info ij;
-    //for(int i = 0; i < 120; i++)
-    //    std::cout << ptr[i];
-    //std::cout << std::endl;
-    //return ij;
+    a2s_info info;
+    uint16_t i = 6;
+    while(ptr[i] != '\0')
+    {
+        info.name += static_cast<char>(ptr[i]);
+        i++;
+    }
+    i++;
+    while(ptr[i] != '\0')
+    {
+        info.map += static_cast<char>(ptr[i]);
+        i++;
+    }
+    i++;
+    while(ptr[i] != '\0')
+    {
+        info.folder += static_cast<char>(ptr[i]);
+        i++;
+    }
+    i++;
+    while(ptr[i] != '\0')
+    {
+        info.game += static_cast<char>(ptr[i]);
+        i++;
+    }
+    i++;
+    info.id = bytes_to_int16(ptr.get() + i);
+    i++;
+    i++;
+    info.players = static_cast<uint16_t>(ptr[i]);
+    i++;
+    info.max_players = static_cast<uint16_t>(ptr[i]);
+    i++;
+    info.bots = static_cast<uint16_t>(ptr[i]);
+    i++;
+    info.server_type = ptr[i];
+    i++;
+    info.environment = ptr[i];
+    i++;
+    info.visibility = (0b1 & ptr[i]);
+    i++;
+    info.vac = (0b1 & ptr[i]);
+    
+    return info;
+}
+
+int16_t client::bytes_to_int16(unsigned char* p)
+{
+    return static_cast<int16_t>(*p | *(p + 1) << 8);
 }
 
 void client::set_timeout(uint32_t time)
