@@ -3,14 +3,18 @@
 
 #include <boost/asio.hpp>
 #include "cialloo/a2s.hpp"
+#include "cialloo/a2s_info.hpp"
 #include <string>
 #include <memory>
 
 namespace cialloo {
 namespace a2s {
 
+namespace net = boost::asio;
+
 class client
 {
+    uint32_t timeout_;
     net::io_context io_;
     net::ip::udp::socket socket_;
     net::ip::udp::endpoint endpoint_;
@@ -21,6 +25,16 @@ public:
     ~client();
     client(const client&) = delete;
     client operator=(const client&) = delete;
+
+    /**
+     * @return      return a2s_info structure, if timeout or error will get nullptr
+     */
+    std::shared_ptr<a2s_info> get_info();
+    
+    void set_timeout(uint32_t time);
+
+private:
+    a2s_info process_info(std::unique_ptr<unsigned char[]>& p);
 };
 
 

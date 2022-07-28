@@ -7,7 +7,7 @@ HEADER_DIR := ./include
 
 CFLAGS := 
 CXXFLAGS := -lpthread -g
-LDFLAGS :=
+LDFLAGS := -lpthread
 
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.

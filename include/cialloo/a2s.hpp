@@ -3,6 +3,10 @@
 
 #include <boost/asio.hpp>
 #include "cialloo/a2s_client.hpp"
+#include "cialloo/a2s_info.hpp"
+
+#define A2S_PACKET_MAX_SIZE 1400
+#define A2S_DEFAULT_TIMEOUT 200         // milisecond
 
 namespace cialloo {
 namespace a2s {
