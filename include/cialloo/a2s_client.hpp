@@ -4,6 +4,8 @@
 #include <boost/asio.hpp>
 #include "cialloo/a2s.hpp"
 #include "cialloo/a2s_info.hpp"
+#include "cialloo/a2s_player.hpp"
+#include <vector>
 #include <string>
 #include <memory>
 
@@ -30,6 +32,11 @@ public:
      * @return      return a2s_info structure, if timeout or error will get nullptr
      */
     std::shared_ptr<a2s_info> get_info();
+
+    /**
+     * @return      get player detail info array of pointer, error with nullptr.
+     */
+    std::shared_ptr<std::vector<a2s_player>> get_player();
     
     void set_timeout(uint32_t time);
 

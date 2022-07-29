@@ -35,6 +35,14 @@ std::shared_ptr<a2s_info> client::get_info()
     return info_p;
 }
 
+std::shared_ptr<std::vector<a2s_player>> client::get_player()
+{
+    std::shared_ptr<std::vector<a2s_player>> player_p{nullptr};
+
+
+    return player_p;
+}
+
 void client::check_for_timeout()
 {
     io_.restart();
